@@ -1,0 +1,54 @@
+name: 'CI/CD'
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  lint_js:
+    name: Lint JavaScript Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install JSHint
+        run: npm install jshint --global
+
+      - name: Run Linter
+        run: |
+          # Run JSHint on the back-end, sentiment and website server files
+          find ./giftlink-backend -name app.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./giftlink-backend -name authRoutes.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./giftlink-backend -name giftRoutes.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./giftlink-backend -name searchRoutes.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./giftlink-backend -name db.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./sentiment -name index.js -not -path "*/node_modules/*" -exec jshint {} +
+          find ./giftwebsite -name index.js -not -path "*/node_modules/*" -exec jshint {} +
+          echo "Linted all the js files successfully"
+
+  client_build:
+    name: Build client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Run build
+        run: |
+          cd giftlink-frontend
+          npm install
+          npm run build
+          echo "Client-side build successfully"
