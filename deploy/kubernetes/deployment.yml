@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftapp
+  labels:
+    app: giftapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: giftapp
+  template:
+    metadata:
+      labels:
+        app: giftapp
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      imagePullSecrets:
+        - name: icr
+      containers:
+        - name: giftapp-container
+          # replace with your registry namespace, e.g. us.icr.io/<namespace>/giftapp:latest
+          image: us.icr.io/<namespace>/giftapp:latest
+          ports:
+            - containerPort: 3060
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongodb-service:27017
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: giftapp-secrets
+                  key: jwt-secret
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gift-app-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 3060
+      protocol: TCP
+  selector:
+    app: giftapp

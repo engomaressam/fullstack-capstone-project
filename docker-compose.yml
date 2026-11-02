@@ -1,0 +1,30 @@
+# Runs the whole GiftLink stack: MongoDB, the back-end API (giftapp) and the website.
+# Values come from a .env file next to this file (see .env.sample).
+services:
+  mongodb:
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+
+  giftapp:
+    build: ./giftlink-backend
+    environment:
+      MONGO_URL: mongodb://root:${MONGO_PASSWORD}@mongodb:27017
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3060:3060"
+    depends_on:
+      - mongodb
+
+  giftwebsite:
+    build: ./giftwebsite
+    ports:
+      - "9000:9000"
+    depends_on:
+      - giftapp
+
+volumes:
+  mongo-data:

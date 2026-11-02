@@ -1,0 +1,17 @@
+{
+  "name": "giftwebsite",
+  "version": "1.0.0",
+  "description": "Express server that serves the GiftLink React build",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.3"
+  }
+}
