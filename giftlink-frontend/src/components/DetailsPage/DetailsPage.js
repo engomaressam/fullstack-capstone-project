@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DetailsPage.css';
+import {urlConfig} from '../../config';
 
 function DetailsPage() {
     const navigate = useNavigate();
@@ -13,14 +14,15 @@ function DetailsPage() {
         const authenticationToken = sessionStorage.getItem('auth-token');
         if (!authenticationToken) {
 			// Task 1: Check for authentication and redirect
-            {{insert code here}}
+            navigate('/app/login');
+            return;
         }
 
         // get the gift to be rendered on the details page
         const fetchGift = async () => {
             try {
 				// Task 2: Fetch gift details
-                const response ={{insert code here}}
+                const response = await fetch(`${urlConfig.backendUrl}/api/gifts/${productId}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -36,15 +38,20 @@ function DetailsPage() {
         fetchGift();
 
 		// Task 3: Scroll to top on component mount
-		{{ insert code here }}
+		window.scrollTo(0, 0);
 
-    }, [productId]);
+    }, [productId, navigate]);
 
 
     const handleBackClick = () => {
 		// Task 4: Handle back click
-		{{ insert code here }}
+		navigate(-1);
 	};
+
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp * 1000);
+        return date.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' });
+    };
 
 	//The comments have been hardcoded for this project.
     const comments = [
@@ -86,33 +93,23 @@ return (
                     <div className="image-placeholder-large">
                         {gift.image ? (
 			// Task 5: Display gift image
-			/*insert code here*/
+			<img src={gift.image} alt={gift.name} className="product-image-large" />
                         ) : (
                             <div className="no-image-available-large">No Image Available</div>
                         )}
                     </div>
-                    // Task 6: Display gift details
-                    	<p><strong>Category:</strong> 
-				{/* insert code here  */}
-			</p>
-                    	<p><strong>Condition:</strong> 
-				{/* insert code here  */}
-                    	</p>
-                    	<p><strong>Date Added:</strong> 
-				{/* insert code here  */}
-                        </p>
-                    	<p><strong>Age (Years):</strong> 
-				{/* insert code here  */}
-                    	</p>
-                    	<p><strong>Description:</strong> 
-				{/* insert code here  */}
-                    	</p>
+                    {/* Task 6: Display gift details */}
+                    	<p><strong>Category:</strong> {gift.category}</p>
+                    	<p><strong>Condition:</strong> {gift.condition}</p>
+                    	<p><strong>Date Added:</strong> {formatDate(gift.date_added)}</p>
+                    	<p><strong>Age (Years):</strong> {gift.age_years}</p>
+                    	<p><strong>Description:</strong> {gift.description}</p>
                 </div>
             </div>
             <div className="comments-section mt-4">
                 <h3 className="mb-3">Comments</h3>
-				// Task 7: Render comments section by using the map function to go through all the comments
-				{{ insert code here }} => (
+				{/* Task 7: Render comments section by using the map function to go through all the comments */}
+				{comments.map((comment, index) => (
                     <div key={index} className="card mb-3">
                         <div className="card-body">
                             <p className="comment-author"><strong>{comment.author}:</strong></p>

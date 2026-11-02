@@ -1,26 +1,63 @@
 /* Task 1: Style the search input field */
 .search-input {
-    /* Insert specific CSS properties here */
+    border-radius: 0.25rem;
+    padding: 0.6rem 0.9rem;
 }
 
 /* Task 2: Style the search button */
 .search-button {
-    /* Insert specific CSS properties here */
+    width: 100%;
+    background-color: #009688;
+    border: none;
+}
+
+.search-button:hover {
+    background-color: #00796b;
 }
 
 /* Task 3: Customize dropdown filters */
 .dropdown-filter {
-    /* Insert specific CSS properties here */
+    margin-bottom: 0.5rem;
 }
 
 /* Task 4: Style the age range slider */
 .age-range-slider {
-    /* Insert specific CSS properties here */
+    width: 100%;
+    margin-top: 0.25rem;
 }
 
 /* Task 5: Enhance search results cards appearance */
 .search-results-card {
-    /* Insert specific CSS properties here */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-/* Additional placeholders for tasks 6 to 10 */
+.search-results-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.search-results-card .card-img-top {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.search-results-card .card-title {
+    font-size: 1.2rem;
+    color: #0056b3;
+    margin-bottom: 0.5rem;
+}
+
+.search-results-card .card-footer {
+    text-align: right;
+    padding: 0.5rem 1rem;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .search-button {
+        width: auto;
+    }
+}
